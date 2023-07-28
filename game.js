@@ -1,74 +1,67 @@
-console.log('Welcome to Rock, Paper, Scissors')
-
-// Playable Hands Array 
+console.log('Welcome to Rock, Paper, Scissors');
 
 const playableHands = ["rock", "paper", "scissors"];
 
-
-// Getting the PC choice randomly 
-
 function getComputerChoice() {
-    let computerChoice = playableHands[Math.floor(Math.random() * playableHands.length)]
-    return computerChoice; 
+    return playableHands[Math.floor(Math.random() * playableHands.length)];
 }
 
-let computerChoice = getComputerChoice();
+let playerHand;
+let computerChoice;
 
+function playRound(playerHand, computerChoice) {
+    playerHand = playerHand.trim().toLowerCase();
 
-// Getting the Player choice through prompt 
-
-let playerHand; 
-
-while (true) {
-    playerHand = prompt("Enter the hand you want to play: ").toLowerCase(); 
-
-    if (playableHands.includes(playerHand)) {
-        console.log("Your choice: ", playerHand);
-        console.log("Computer choice: ", computerChoice);
-        break;
+    if (
+        (playerHand === 'rock' && computerChoice === 'scissors') ||
+        (playerHand === 'paper' && computerChoice === 'rock') ||
+        (playerHand === 'scissors' && computerChoice === 'paper')
+    ) {
+        return 'You won';
+    } else if (playerHand === computerChoice) {
+        return 'Tie';
     } else {
-        console.log("Invalid entry. Choose from rock, paper or scissors");
+        return 'You lost';
     }
 }
 
+let playerScore = 0;
+let computerScore = 0;
 
-function playRound() {
-    if (playerHand == 'rock' & computerChoice == 'rock') {
-        console.log('Result: Tie')
+for (let round = 1; round <= 5; round++) {
+    computerChoice = getComputerChoice();
+
+    while (true) {
+        playerHand = prompt("Enter the hand you want to play: ").toLowerCase();
+
+        if (playableHands.includes(playerHand)) {
+            console.log("Round", round);
+            console.log("Your choice: ", playerHand);
+            console.log("Computer choice: ", computerChoice);
+            break;
+        } else {
+            console.log("Invalid entry. Choose from rock, paper, or scissors");
+        }
     }
-    if (playerHand == 'rock' & computerChoice == 'paper') {
-        console.log('Result: You lost to paper')
+
+    const roundResult = playRound(playerHand, computerChoice);
+
+    // Update gamescore 
+    if (roundResult === 'You won') {
+        playerScore++;
+    } else if (roundResult === 'You lost') {
+        computerScore++;
     }
-    if (playerHand == 'rock' & computerChoice == 'scissors') {
-        console.log('Result: You won against scissors')
-    }
-    if (playerHand == 'paper' & computerChoice == 'paper') {
-        console.log('Result: Tie')
-    }
-    if (playerHand == 'paper' & computerChoice == 'scissors') {
-        console.log('Result: You lost to scissors')
-    }
-    if (playerHand == 'paper' & computerChoice == 'rock') {
-        console.log('Result: You won against rock')
-    }
-    if (playerHand == 'scissors' & computerChoice == 'scissors') {
-        console.log('Result: Tie')
-    }
-    if (playerHand == 'scissors' & computerChoice == 'rock') {
-        console.log('Result: You lost to rock')
-    }
-    if (playerHand == 'scissors' & computerChoice == 'paper') {
-        console.log('Result: You won against paper')
-    }
+
+    console.log('Round result: ', roundResult);
+    console.log('Current Score - You:', playerScore, " Computer: ", computerScore);
 }
 
-playRound(computerChoice, playerHand); 
-
-
-
-
-
-
-
-
-
+// Determine endgame winner
+if (playerScore > computerScore) {
+    console.log('You win the game');
+} else if (playerScore < computerScore) {
+    console.log('You lost the game');
+} else {
+    console.log('It\'s a tie');
+}
